@@ -1,30 +1,38 @@
 /**
  * Implementation of throttleController
- *
+ * <p>
+ * Quantize implementation {@link #quantizer} calculates throttle
  * @author Atul Sharma
- * @see ThrottleController,Quantizer  for Interface definition
  * @since 13-10-21
  */
 public class ThrottleControllerImpl implements ThrottleController {
 
     Integer cruiseSpeed;
+    Integer throttleValue = 0;
     /**
      * Calculate quantized value of throttle
+     * <p>
+     * We consider previous throttle value before changing it
+     * only when our input is between the hysteresis curve,
+     * i.e (currentSpeed +-2)
+     * In rest of the case it works normally.
      */
     Quantizer<Integer> quantizer = quantity -> {
-        double result = 0;
-        if (quantity > 70) result = 7;
-        else if (quantity < 0) result = 0;
+        double throttle;
+        if (quantity > 70) throttle = 7;
+        else if (quantity <= 0) throttle = 0;
         else {
             if (quantity % 10 >= 8) {
-                result = Math.ceil(quantity / 10f);
+                double tempThrottleValue = Math.ceil(quantity / 10f);
+                throttle = Math.max(tempThrottleValue, throttleValue);
             } else if (quantity % 10 <= 2) {
-                result = Math.floor(quantity / 10f);
+                double tempThrottleValue = Math.floor(quantity / 10f);
+                throttle = Math.max(tempThrottleValue, throttleValue);
             } else {
-                result = Math.ceil(quantity / 10f);
+                throttle = Math.ceil(quantity / 10f);
             }
         }
-        return (int) result;
+        return (int) throttle;
     };
 
 
@@ -47,6 +55,16 @@ public class ThrottleControllerImpl implements ThrottleController {
     @Override
     public void setCruiseSpeed(Integer cruiseSpeed) {
         this.cruiseSpeed = cruiseSpeed;
+    }
+
+    /**
+     * A setter to set current throttle value
+     *
+     * @param throttleControlValue with current speed
+     */
+    @Override
+    public void setThrottleValue(Integer throttleControlValue) {
+        this.throttleValue = throttleControlValue;
     }
 
 }
