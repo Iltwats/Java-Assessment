@@ -15,13 +15,13 @@ public class ThrottleControllerImpl implements ThrottleController {
      * <p>
      * Also we are considering that speed won't
      * change by more than 5 units in consecutive iteration.
-     * For more than that it is been handled.
-     * </p>
+     * For more than that it can been handled.
+     *
      * <p>
      * We consider previous throttle value before changing it
      * only when our input is between the hysteresis curve,
      * i.e (currentSpeed +-2)
-     * </p>
+     *
      * <p>
      * In rest of the case it works normally.
      */
