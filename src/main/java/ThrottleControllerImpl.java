@@ -2,6 +2,7 @@
  * Implementation of throttleController
  * <p>
  * Quantize implementation {@link #quantizer} calculates throttle
+ *
  * @author Atul Sharma
  * @since 13-10-21
  */
@@ -12,20 +13,38 @@ public class ThrottleControllerImpl implements ThrottleController {
     /**
      * Calculate quantized value of throttle
      * <p>
+     * Also we are considering that speed won't
+     * change by more than 5 units in consecutive iteration.
+     * For more than that it is been handled.
+     * </p>
+     * <p>
      * We consider previous throttle value before changing it
      * only when our input is between the hysteresis curve,
      * i.e (currentSpeed +-2)
+     * </p>
+     * <p>
      * In rest of the case it works normally.
      */
     Quantizer<Integer> quantizer = quantity -> {
+        Integer currentDiff = Math.abs(quantity - cruiseSpeed);
+        Integer posRange, negRange;
         double throttle;
+        if (currentDiff <= 5) {
+            posRange = 2;
+            negRange = 8;
+        } else {
+            // which could be decided in future
+            posRange = 3;
+            negRange = 7;
+        }
+
         if (quantity > 70) throttle = 7;
         else if (quantity <= 0) throttle = 0;
         else {
-            if (quantity % 10 >= 8) {
+            if (quantity % 10 >= negRange) {
                 double tempThrottleValue = Math.ceil(quantity / 10f);
                 throttle = Math.max(tempThrottleValue, throttleValue);
-            } else if (quantity % 10 <= 2) {
+            } else if (quantity % 10 <= posRange) {
                 double tempThrottleValue = Math.floor(quantity / 10f);
                 throttle = Math.max(tempThrottleValue, throttleValue);
             } else {

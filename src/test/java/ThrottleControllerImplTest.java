@@ -22,6 +22,7 @@ class ThrottleControllerImplTest {
     @Test
     public void cornerCasesForNegative() {
         Integer getCurrentSpeed = -34;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         Assertions.assertEquals(throttleControlValue, 0);
     }
@@ -30,6 +31,7 @@ class ThrottleControllerImplTest {
     @Test
     public void cornerCasesForMoreThanSeventy() {
         Integer getCurrentSpeed = 74;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         Assertions.assertEquals(throttleControlValue, 7);
     }
@@ -38,6 +40,7 @@ class ThrottleControllerImplTest {
     @Test
     public void hysteresisOne() {
         Integer getCurrentSpeed = 9;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         throttleController.setThrottleValue(throttleControlValue);
         Assertions.assertEquals(throttleControlValue, 1);
@@ -47,6 +50,7 @@ class ThrottleControllerImplTest {
     @Test
     public void hysteresisTwo() {
         Integer getCurrentSpeed = 12;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         throttleController.setThrottleValue(throttleControlValue);
         Assertions.assertEquals(throttleControlValue, 1);
@@ -56,6 +60,7 @@ class ThrottleControllerImplTest {
     @Test
     public void hysteresisThree() {
         Integer getCurrentSpeed = 12;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         throttleController.setThrottleValue(throttleControlValue);
         Integer getCurrentSpeed1 = 14;
@@ -66,7 +71,8 @@ class ThrottleControllerImplTest {
     @DisplayName("Test for Hysteresis based on previous throttle value")
     @Test
     public void hysteresisFour() {
-        Integer getCurrentSpeed = 18;
+        Integer getCurrentSpeed = 13;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         throttleController.setThrottleValue(throttleControlValue);
         Integer getCurrentSpeed1 = 8;
@@ -77,22 +83,25 @@ class ThrottleControllerImplTest {
     @DisplayName("Test for Hysteresis based on previous throttle value")
     @Test
     public void hysteresisFive() {
-        Integer getCurrentSpeed = 14;
+        Integer getCurrentSpeed = 13;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         throttleController.setThrottleValue(throttleControlValue);
-        Integer getCurrentSpeed1 = 7;
+        Integer getCurrentSpeed1 = 9;
         final Integer throttleControlValue1 = throttleController.calculateThrottle(getCurrentSpeed1);
-        Assertions.assertEquals(throttleControlValue1, 1);
+        Assertions.assertEquals(throttleControlValue1, 2);
     }
 
     @DisplayName("Test for Hysteresis based on previous throttle value")
     @Test
     public void hysteresisSix() {
         Integer getCurrentSpeed = 7;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         throttleController.setThrottleValue(throttleControlValue);
         Integer getCurrentSpeed1 = 12;
         final Integer throttleControlValue1 = throttleController.calculateThrottle(getCurrentSpeed1);
+        throttleController.setCruiseSpeed(getCurrentSpeed1);
         Assertions.assertEquals(throttleControlValue1, 1);
     }
 
@@ -100,6 +109,7 @@ class ThrottleControllerImplTest {
     @Test
     public void randomSpeed() {
         Integer getCurrentSpeed = 45;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         Assertions.assertEquals(throttleControlValue, 5);
     }
@@ -108,6 +118,7 @@ class ThrottleControllerImplTest {
     @Test
     public void randomSpeedAgain() {
         Integer getCurrentSpeed = 33;
+        throttleController.setCruiseSpeed(getCurrentSpeed);
         final Integer throttleControlValue = throttleController.calculateThrottle(getCurrentSpeed);
         Assertions.assertEquals(throttleControlValue, 4);
     }
